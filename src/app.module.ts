@@ -16,11 +16,11 @@ import { DatabaseService } from './block/database/database.service';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    HttpModule,
+    HttpModule, // 오류 출력
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRootAsync({// DB연동
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({ 
         type: 'mysql',
         host: configService.get('DB_HOST'),
         port: +configService.get('DB_PORT'),

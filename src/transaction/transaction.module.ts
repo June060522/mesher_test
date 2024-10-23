@@ -6,7 +6,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Block } from "src/block/entities/block.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Block])],
+    imports: [TypeOrmModule.forFeature([Block])],// 데이터 베이스 접근하기 위해 필요함
     controllers: [TransactionController],
     providers: [TransactionService, DatabaseService]
 })

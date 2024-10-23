@@ -8,17 +8,17 @@ export class BlockController {
     ) { }
 
     @Get('latest')
-    getBlockLatest(): Promise<any> {
+    getBlockLatest(): Promise<any> { // 마지막 블록 겟
         return this.blockService.getBlockLatest();
     }
 
     @Get('hash/:hash')
-    getBlockByHash(@Param('hash') blockHash: string): Promise<any> {
+    getBlockByHash(@Param('hash') blockHash: string): Promise<any> { // 해쉬를 기준으로 블록접근
         return this.blockService.getBlockByHash(blockHash);
     }
 
     @Get('number/:number')
-    getBlockByNumber(@Param('number') blockNumber: string): Promise<any> {
+    getBlockByNumber(@Param('number') blockNumber: string): Promise<any> { // 블록 넘버를 기준으로 블록 접근
         return this.blockService.getBlockByNumber(blockNumber);
     }
 }

@@ -22,13 +22,13 @@ export class TransactionService {
         return await this.getLogs(receipt);
     }
 
-    async getReceiptByFrom(from: string): Promise<any> {
-        const receipts = await this.dataService.getDataFromDic(from);
+    async getReceiptByFrom(from: string): Promise<any> { // From을 기준으로 Receipt조회
+        const receipts = await this.dataService.getDataFromDic(from); // 데이터베이스쪽에서 값 접근
         return await this.getLogs(receipts);
     }
 
-    async getReceiptByTo(to: string): Promise<any> {
-        const receipts = await this.dataService.getDataToDic(to);
+    async getReceiptByTo(to: string): Promise<any> { // To를 기준으로 Receipt조회
+        const receipts = await this.dataService.getDataToDic(to); // 데이터베이스쪽에서 값 접근
         return await this.getLogs(receipts);
     }
 

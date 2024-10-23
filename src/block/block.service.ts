@@ -66,7 +66,7 @@ export class BlockService {
         }
     }
 
-    async getBlockLatest(): Promise<any> {
+    async getBlockLatest(): Promise<any> { // 마지막 블록 가져오기 (테스트용)
         const blocks = await this.provider.getBlock('latest');
         return await blocks;
     }

@@ -9,8 +9,8 @@ export class DatabaseService {
     private provider: ethers.InfuraProvider;
 
     private lastBlockNum: number; //마지막에 들어온 블록 정보 <- 이걸로 비용 최소화
-    private dataFromDic: { [key: string]: any[] } = {};
-    private dataToDic: { [key: string]: any[] } = {};
+    private dataFromDic: { [key: string]: any[] } = {}; // From을 기준으로 영수증 들고 있음
+    private dataToDic: { [key: string]: any[] } = {}; // To을 기준으로 영수증 들고 있음
 
     constructor(
         @InjectRepository(Block)
@@ -19,18 +19,18 @@ export class DatabaseService {
         this.provider = new ethers.InfuraProvider("mainnet", process.env.API_KEY);
     }
 
-    async getDataFromDic(key: string): Promise<any> {
+    async getDataFromDic(key: string): Promise<any> { // From을 기준으로 data가져오기
         await this.fetchData();
         return this.dataFromDic[key];
     }
 
-    async getDataToDic(key: string): Promise<any> {
+    async getDataToDic(key: string): Promise<any> { // To를 기준으로 data가져오기
         await this.fetchData();
         console.log(this.dataToDic[key]);
         return this.dataToDic[key];
     }
 
-    async fetchData(): Promise<void> {
+    async fetchData(): Promise<void> { // 데이터 최신 블록까지 불러오기
         if (this.lastBlockNum == undefined)
             this.lastBlockNum = 21026729; // 가격때문에...테스트용
 
@@ -79,7 +79,7 @@ export class DatabaseService {
         }
     }
 
-    async isLastBlockCheck(lateBlockHash: number): Promise<boolean> {
+    async isLastBlockCheck(lateBlockHash: number): Promise<boolean> { // 마지막 블록인지 확인
         const block = await this.provider.getBlock('latest');
 
         if (!block)
@@ -87,7 +87,7 @@ export class DatabaseService {
         return lateBlockHash === block.number;
     }
 
-    async regist(hash: string) {
+    async regist(hash: string) { // DB에 블록 등록
         try {
             let getBlock;
             if (hash.startsWith('0x')) { // hash인지 blockNumber인지
@@ -104,7 +104,7 @@ export class DatabaseService {
             block.blockNum = getBlock.number;
             block.hash = getBlock.hash;
 
-            block.block = JSON.stringify(getBlock);
+            block.block = JSON.stringify(getBlock); // Json으로 블록 저장
 
             block.log = [] as string[];
 
@@ -114,7 +114,7 @@ export class DatabaseService {
                     block.log.push(JSON.stringify(receipt.logs));
                 })
             );
-            block.transactionReceipt = JSON.stringify(getBlock.transactions);
+            block.transactionReceipt = JSON.stringify(getBlock.transactions); // Json으로 영수증 저장
 
             this.blockRepository.save(block); // 저장
         } catch (error) {
@@ -122,7 +122,7 @@ export class DatabaseService {
         }
     }
 
-    async findBlock(hash: string): Promise<Block> {
+    async findBlock(hash: string): Promise<Block> { // DB에서 블록 찾기
         let block;
         if (hash.startsWith('0x')) {// 해쉬값인지 블록넘버값인지
             block = await this.blockRepository.findOne({ where: { hash: hash } });
@@ -157,12 +157,12 @@ export class DatabaseService {
         return logs;
     }
 
-    async GetDataCount(): Promise<Number> {
+    async GetDataCount(): Promise<Number> {//블록 갯수 세는 함수
         const block = await this.blockRepository.find();
         return block.length;
     }
 
-    async GetTransactionCount(): Promise<Number> {
+    async GetTransactionCount(): Promise<Number> {//영수증 갯수 세는 함수
         const blocks = await this.blockRepository.find();
         let cnt = 0;
         await Promise.all(
@@ -174,7 +174,7 @@ export class DatabaseService {
         return cnt;
     }
 
-    async GetLogCount(): Promise<Number> {
+    async GetLogCount(): Promise<Number> {//로그 갯수 세는 함수
         const blocks = await this.blockRepository.find();
         let cnt = 0;
         await Promise.all(

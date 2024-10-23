@@ -20,9 +20,9 @@ export class SlackService {
 
     async sendDatabaseDataMessage() {
         console.log('5분마다 실행');
-        let blockCount = await this.databaseService.GetDataCount();
-        let transactionCount = await this.databaseService.GetTransactionCount();
-        let LogCount = await this.databaseService.GetLogCount();;
+        let blockCount = await this.databaseService.GetDataCount(); // db에서 블록 갯수 접근
+        let transactionCount = await this.databaseService.GetTransactionCount(); // db에서 영수증 갯수 접근
+        let LogCount = await this.databaseService.GetLogCount();; // db에서 로그 갯수 접근
         await this.sendMessage('C07TGN5K36V', `
         Block Count : ${blockCount}
 TransactionReceipt Count : ${transactionCount}
@@ -30,7 +30,7 @@ Log Count : ${LogCount}`);
     }
 
     async sendServerStateMessage() {
-        console.log('1분마다 실행');
+        console.log('1시간마다 실행');
         try {
             const response = await axios.get('http://localhost:3000/api');
             if (response.status === 200) {
